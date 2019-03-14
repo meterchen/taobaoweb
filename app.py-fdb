@@ -1,0 +1,75 @@
+#!/usr/bin/python3  
+# -*- coding: utf-8 -*-  
+
+from flask import Flask,request,redirect,url_for,session
+
+from flask import render_template
+from flask_bootstrap import Bootstrap
+
+import fdb
+
+app = Flask(__name__)
+bootstrap = Bootstrap(app)
+
+
+@app.route("/login")
+def hello_world():
+    return render_template("login.html")
+
+def query_db(database, index, store):
+    con = fdb.connect(host='127.0.0.1', database=database, user='sysdba', password='masterkey', charset='UTF8')
+    cur = con.cursor()
+
+    #sql_select = "select NUM_IID from ITEM where OUTER_ID='ZM6466'"
+    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE from ITEM where OUTER_ID LIKE "
+    sql_select += "'%"+index+"'"
+    sql_select += " AND (CLIENT_IS_DELETE  is NULL or CLIENT_IS_DELETE =0)"
+
+    # 显示全部内容
+    cur.execute(sql_select)
+    item = cur.fetchall()
+    cur.close()
+
+    num_iid=[]
+    for t in item:
+        j=[]
+        for i in t:
+            j.append(i)
+        if t[2]==2:
+            j.append("出售")
+        if t[2]==3:
+            j.append("仓库")
+        #加上店名    
+        j.append(store)	
+        #加上编码
+        #j.append(index)
+
+        num_iid.append(j)
+
+    #print(num_iid)
+
+    return num_iid
+            
+
+@app.route("/",methods=['post','get'])
+def index():
+    #user_agent = request.headers.get("User_Agent")
+    num_iid=''
+    if request.method == 'POST': # 注意POST为大写
+        username = request.form.get('name')
+        print(username)
+        if username:
+        	#企业店
+        	num_iid = query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.SY", username, store="企业店")
+        	num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.TT", username, store="彤彤店")
+        	num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.NT", username, store="女童店")
+        	num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.HD", username, store="憨豆店")
+            
+            #session['name'] = num_iid
+
+            #return redirect(url_for('index'))
+
+    return render_template('index.html',u=num_iid)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0',port=5000,debug=True)

@@ -1,0 +1,9 @@
+[2019-02-14 12:41:11 +0800] [592] [INFO] Starting gunicorn 19.6.0
+[2019-02-14 12:41:11 +0800] [592] [INFO] Listening at: http://127.0.0.1:5000 (592)
+[2019-02-14 12:41:11 +0800] [592] [INFO] Using worker: sync
+[2019-02-14 12:41:11 +0800] [595] [INFO] Booting worker with pid: 595
+[2019-02-14 12:41:11 +0800] [596] [INFO] Booting worker with pid: 596
+[2019-02-14 12:41:11 +0800] [597] [INFO] Booting worker with pid: 597
+[2019-02-14 12:41:11 +0800] [598] [INFO] Booting worker with pid: 598
+[2019-02-14 13:15:39 +0800] [592] [INFO] Handling signal: term
+[2019-02-14 13:15:39 +0800] [592] [INFO] Shutting down: Master
