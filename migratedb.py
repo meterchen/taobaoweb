@@ -13,11 +13,12 @@ if __name__ == "__main__":
     cur_ob = con_ob.cursor()
 
     for t in item:
-        print("SELECT POSITION FROM ITEM WHERE NUM_IID=%d"%t)
+        #print("SELECT POSITION FROM ITEM WHERE NUM_IID=%d"%t)
         cur_ob.execute("SELECT POSITION FROM ITEM WHERE NUM_IID=%d"%t)
         pos = cur_ob.fetchall()
         if pos:
-            print("UPDATE ITEM SET POSITION='%s'"%pos[0])
+            if pos[0] != "AAAA"
+                print("UPDATE ITEM SET POSITION='%s'"%pos[0])
             cur_sq3.execute("UPDATE ITEM SET POSITION='%s'"%pos[0])
 
     con_sq3.commit()
