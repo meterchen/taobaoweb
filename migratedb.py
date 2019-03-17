@@ -2,14 +2,14 @@ import sqlite3
 
 if __name__ == "__main__":
 
-    con_sq3 = sqlite3.connect("seyryan.db")
+    con_sq3 = sqlite3.connect("seyryan_np.db")
     cur_sq3 = con_sq3.cursor()
 
     sql_select = "SELECT NUM_IID FROM ITEM"
     cur_sq3.execute(sql_select)
     item = cur_sq3.fetchall()
 
-    con_ob = sqlite3.connect("obsolete.db")
+    con_ob = sqlite3.connect("seyryan.db")
     cur_ob = con_ob.cursor()
 
     for t in item:
