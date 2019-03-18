@@ -3,9 +3,16 @@
 {% block title %}醉美彤彤商品查询系统{% endblock %}
 
 {% block page_content %}
+    {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+            </div>
+    {% endfor %}
+
     <form method="post">
         款号：<input type="text" name="outer_id"/>
-        <input type="submit" value="Submit"/>
+        <input type="submit" name="submit_outer_id" value="Submit"/>
     </form>
 
     <table class="table table-bordered">
@@ -27,7 +34,9 @@
 		<td>{{ i[4] }}</td>
 		<td> <form method="post">  <input type="text" size=10 name="position" value={{ i[5] }}>
 				<input type="hidden" name="num_iid" value={{ i[0] }}>
-				<input type="submit" value="保存"></form>
+				<input type="submit" name="submit_save" value="保存">
+
+            </form>
 		</td>
 		<td>{{ i[0] }}</td>
             </tr>
