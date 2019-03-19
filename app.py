@@ -24,7 +24,7 @@ def query_db(database, index):
 
     # sql_select = "select NUM_IID from ITEM where OUTER_ID='ZM6466'"
     sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION from ITEM where OUTER_ID LIKE "
-    sql_select += "'%" + index + "'"
+    sql_select += "'%" + index +"%"+ "'"
 
     # 显示全部内容
     cur.execute(sql_select)
@@ -67,8 +67,11 @@ def index():
                 # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.TT", username, store="彤彤店")
                 # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.NT", username, store="女童店")
                 # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.HD", username, store="憨豆店")
-                session['outer_id'] = outer_id
-                session['num_iid'] = item[0][0]
+                if item:
+                    session['outer_id'] = outer_id
+                    session['num_iid'] = item[0][0]
+                else:
+                    flash("商品不存在！")
                 # return redirect(url_for('index'))
                 render_template('index.html', u=item)
 
