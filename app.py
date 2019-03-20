@@ -69,7 +69,7 @@ def index():
                 # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.HD", username, store="憨豆店")
                 if item:
                     session['outer_id'] = outer_id
-                    session['num_iid'] = item[0][0]
+                    session['num_iid'] = item
                 else:
                     flash("商品不存在！")
                 # return redirect(url_for('index'))
@@ -82,7 +82,8 @@ def index():
             print(position)
             print(num_iid)
             if position:
-                save_pos("./database/seyryan.db", position, num_iid)
+                for t in num_iid:
+                    save_pos("./database/seyryan.db", position, t[0])
                 item = query_db("./database/seyryan.db", session.get("outer_id"))
                 flash("货位号保存成功!")
                 return render_template('index.html', u=item)
