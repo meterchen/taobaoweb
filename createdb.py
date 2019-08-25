@@ -12,6 +12,8 @@ import sqlite3
 import platform
 import winreg
 
+import paramiko
+
 
 class MainWindow(QWidget):
     def __init__(self, parent=None):
@@ -116,6 +118,34 @@ class MainWindow(QWidget):
         con_sq3.close()
 
         self.logt.append("转换完成！")
+
+
+        transport = paramiko.Transport(('192.168.5.26', 22))
+        transport.connect(username="pi", password='raspberry')
+        sftp = paramiko.SFTPClient.from_transport(transport)
+        #sftp.mkdir("/home/pi/Documents/sss")
+        # 将location.py 上传至服务器 /tmp/test.py
+        sftp.put('C:\\Users\\meterchen\Desktop\\taobaoweb\\seyryan_np.db', '/home/pi/Documents/flaskDemo/database/seyryan_np.db')
+        # 将remove_path 下载到本地 local_path
+        # sftp.get('/root/oldgirl.txt', 'fromlinux.txt')
+
+        transport.close()
+        self.logt.append("上传完成！")
+
+        # 实例化一个transport对象
+        transport = paramiko.Transport(('192.168.5.26', 22))
+        # 建立连接
+        transport.connect(username="pi", password='raspberry')
+        # 将sshclient的对象的transport指定为以上的transport
+        ssh = paramiko.SSHClient()
+        ssh._transport = transport
+        # 执行命令，和传统方法一样
+        stdin, stdout, stderr = ssh.exec_command('cd /home/pi/Documents/flaskDemo/database;./migratedb.sh')
+
+        self.logt.append(stdout.read().decode())
+        # 关闭连接
+        transport.close()
+
         # prefix = "https://item.taobao.com/item.htm?id="
 
         # url = prefix + str(num_iid[0][0])
