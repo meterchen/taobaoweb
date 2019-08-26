@@ -1,7 +1,7 @@
 # coding=utf-8
 
 import sys, os
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
@@ -15,23 +15,37 @@ import winreg
 import paramiko
 
 
-class MainWindow(QWidget):
+class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__()
-        self.resize(800, 800)
+
+        # 窗口最大化
+        #self.showMaximized()
+
+        tb = self.addToolBar("tool")
+        start=QAction("START",self)
+        tb.addAction(start)
+        tb.actionTriggered[QAction].connect(self.opendb)
 
         self.setWindowTitle("db_converter")
 
         self.btn = QPushButton("START CONVERT")
         self.btn.clicked.connect(self.opendb)
+        self.layout_h = QHBoxLayout()
+        self.layout_h.addWidget(self.btn)
+        self.layout_h.addStretch()
 
         self.logt = QTextEdit()
 
         self.layout_v = QVBoxLayout()
-        self.layout_v.addWidget(self.btn)
+        self.layout_v.addLayout(self.layout_h)
         self.layout_v.addWidget(self.logt)
 
-        self.setLayout(self.layout_v)
+        main_frame= QWidget()
+        main_frame.setLayout(self.layout_v)
+        self.setCentralWidget(main_frame)
+
+        self.setWindowState(Qt.WindowMaximized)
 
     def query_fdb(self, database, store):
         self.logt.append(database)
