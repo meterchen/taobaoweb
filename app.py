@@ -23,7 +23,7 @@ def query_db(database, index):
     cur = con.cursor()
 
     # sql_select = "select NUM_IID from ITEM where OUTER_ID='ZM6466'"
-    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION from ITEM where OUTER_ID LIKE "
+    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL from ITEM where OUTER_ID LIKE "
     sql_select += "'%" + index +"%"+ "'"
 
     # 显示全部内容

@@ -47,6 +47,23 @@ class MainWindow(QMainWindow):
 
         self.setWindowState(Qt.WindowMaximized)
 
+    def query_picture(self,database,num_iid):
+        con = fdb.connect(host='127.0.0.1', database=database, user='sysdba', password='masterkey', charset="utf8")
+
+        cur = con.cursor()
+
+        # 已删除宝贝除外
+        sql_select = "select URL from PICTURE where (NUM_IID=%d  and POS=0)" %num_iid
+
+        # 显示全部内容
+        cur.execute(sql_select)
+
+        item = cur.fetchall()
+
+        con.close()
+
+        return item[0][0]
+
     def query_fdb(self, database, store):
         self.logt.append(database)
         con = fdb.connect(host='127.0.0.1', database=database, user='sysdba', password='masterkey', charset="utf8")
@@ -60,7 +77,7 @@ class MainWindow(QMainWindow):
         # cur_fb = con_fb1.cursor()
 
         # 已删除宝贝除外
-        sql_select = '''select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE from ITEM 
+        sql_select = '''select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,CLIENT_ID from ITEM 
                                 where (CLIENT_IS_DELETE  is NULL or CLIENT_IS_DELETE =0)'''
 
         # 显示全部内容
@@ -68,7 +85,7 @@ class MainWindow(QMainWindow):
 
         item = cur.fetchall()
 
-        con.close()
+        #con.close()
 
         num_iid = []
         for t in item:
@@ -77,16 +94,27 @@ class MainWindow(QMainWindow):
                 t.append("出售")
             elif t[2] == 3:
                 t.append("仓库")
-            elif t[2] == 5:
-                t.append("回收")
             else:
-                continue      #bugfix 本地宝贝
+                continue      #bugfix 本地宝贝略过
 
             # 加上店名
             t.append(store)
             t.append("AAAA")
+            #####
+            #颜色图片排除。颜色图片的POS也是0，但是PROPERTIES不是NULL
+            #sql_select = "select URL from PICTURE where (CLIENT_ITEMID='%s'  and POS=0 and PROPERTIES is NULL)" % t[3]
+            sql_select = "select URL from PICTURE where (CLIENT_ITEMID='%s'  and POS=0 and (PROPERTIES is NULL or PROPERTIES=''))" % t[3]
+            # 显示全部内容
+            cur.execute(sql_select)
+
+            pic_url = cur.fetchall()
+
+            t.append(pic_url[0][0])
+            ####
+            #t.append(self.query_picture(database,t[0]))
             num_iid.append(t)
 
+        con.close() #关闭数据库
         # print(num_iid)
         return num_iid
 
@@ -120,12 +148,14 @@ class MainWindow(QMainWindow):
                                         CLIENT_NAVIGATION_TYPE SMALLINT,
                                         STOCK_STATUS VARCHAR(96),
                                         STORE_NAME VARCHAR(96),
-                                        POSITION VARCHAR(96)
+                                        POSITION VARCHAR(96),
+                                        PIC_URL VARCHAR(256)
                                         )'''
         cur_sq3.execute(sql_create)
 
+        #t[3]=CLIENT_ID
         for t in num_iid:
-            sql_insert = "insert into ITEM values(%d,'%s',%d,'%s','%s','%s')" % (t[0], t[1], t[2], t[3], t[4], t[5])
+            sql_insert = "insert into ITEM values(%d,'%s',%d,'%s','%s','%s','%s')" % (t[0], t[1], t[2], t[4], t[5], t[6],t[7])
             cur_sq3.execute(sql_insert)
 
         # 建立索引

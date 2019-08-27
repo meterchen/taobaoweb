@@ -21,7 +21,8 @@
         <th>状态</th>
         <th>店铺</th>
         <th>位置</th>
-	<th>商品ID</th>
+	    <th>商品ID</th>
+        <th>商品图片</th>
     </tr>
         {% for i in u %}
             <tr>
@@ -39,8 +40,9 @@
             </form>
 		</td>
 		<td>{{ i[0] }}</td>
+        <td><img src={{ i[6] }} width="128" height="128"></td>
             </tr>
-    {% endfor %}
+        {% endfor %}
     </table>
 
 {% endblock %}
