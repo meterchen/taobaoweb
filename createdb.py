@@ -75,8 +75,13 @@ class MainWindow(QMainWindow):
             t = list(t)
             if t[2] == 2:
                 t.append("出售")
-            if t[2] == 3:
+            elif t[2] == 3:
                 t.append("仓库")
+            elif t[2] == 5:
+                t.append("回收")
+            else:
+                continue      #bugfix 本地宝贝
+
             # 加上店名
             t.append(store)
             t.append("AAAA")
