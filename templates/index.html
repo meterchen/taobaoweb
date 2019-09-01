@@ -35,12 +35,13 @@
 		<td>{{ i[4] }}</td>
 		<td> <form method="post">  <input type="text" size=10 name="position" value={{ i[5] }}>
 				<input type="hidden" name="num_iid" value={{ i[0] }}>
+                <input type="hidden" name="outer_id" value={{ i[1] }}>
 				<input type="submit" name="submit_save" value="保存">
 
             </form>
 		</td>
 		<td>{{ i[0] }}</td>
-        <td><img src={{ i[6] }} width="128" height="128"></td>
+        <td><img src={{ i[6] }} width="64" height="64"></td>
             </tr>
         {% endfor %}
     </table>
