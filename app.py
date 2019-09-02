@@ -87,21 +87,23 @@ def index():
     # 几个提交按钮共用一个POST处理方法
     if request.method == 'POST':  # 注意POST为大写
         if "submit_outer_id" in request.form:
+            fun = request.form.get('flist')
             outer_id = request.form.get('outer_id')
             # print(username)
-            if outer_id:
-                item = query_by_outerid("./database/seyryan.db", outer_id)
-                # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.TT", username, store="彤彤店")
-                # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.NT", username, store="女童店")
-                # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.HD", username, store="憨豆店")
-                if item:
-                    session['outer_id'] = outer_id
-                    session['num_iid'] = item
-                else:
-                    flash("商品不存在！")
-                # return redirect(url_for('index'))
-                render_template('index.html', u=item)
-            else:   #提交为空则显示没有设置货位的商品列表
+            if fun=='1':
+                if outer_id:
+                    item = query_by_outerid("./database/seyryan.db", outer_id)
+                    # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.TT", username, store="彤彤店")
+                    # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.NT", username, store="女童店")
+                    # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.HD", username, store="憨豆店")
+                    if item:
+                        session['outer_id'] = outer_id
+                        session['num_iid'] = item
+                    else:
+                        flash("商品不存在！")
+                    # return redirect(url_for('index'))
+                    render_template('index.html', u=item)
+            if fun=='2': #显示没有设置货位的商品列表
                 item = query_nopos("./database/seyryan.db")
                 if item:
                     session['outer_id'] = "SSSS"
