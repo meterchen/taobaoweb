@@ -62,6 +62,16 @@ def query_dup(database):    #查询出售中并且重复上架的宝贝
 
     return item
 
+def query_less(database):    #查询出售中并且库存少于10的宝贝
+    con = sqlite3.connect(database)
+    cur = con.cursor()
+    sql_select = "select * from ITEM where NUM<10 and STOCK_STATUS='出售'"
+    cur.execute(sql_select)
+    item = cur.fetchall()
+    cur.close()
+
+    return item
+
 def query_nopos(database):
     con = sqlite3.connect(database)
     cur = con.cursor()
@@ -94,6 +104,7 @@ def index():
     # user_agent = request.headers.get("User_Agent")
     item = ''
 
+    # NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL
     # 几个提交按钮共用一个POST处理方法
     if request.method == 'POST':  # 注意POST为大写
         if "submit_outer_id" in request.form:
@@ -123,8 +134,17 @@ def index():
                     flash("商品不存在！")
                 render_template('index.html', u=item)
                 
-            if fun=='3':
+            if fun=='3': #查找重复上架的商品
                 item = query_dup("./database/seyryan.db")
+                if item:
+                    session['outer_id'] = "SSSS"
+                    session['num_iid'] = item
+                else:
+                    flash("商品不存在！")
+                render_template('index.html', u=item)
+
+            if fun=='4': #查找库存少于10的出售中商品
+                item = query_less("./database/seyryan.db")
                 if item:
                     session['outer_id'] = "SSSS"
                     session['num_iid'] = item
