@@ -22,31 +22,34 @@
 
     <table class="table table-bordered">
     <tr>
-	<th>商家编码</th>
+        <th>商品图片</th>
+	    <th>商家编码</th>
         <th>状态</th>
         <th>店铺</th>
         <th>位置</th>
 	    <th>商品ID</th>
-        <th>商品图片</th>
+        
     </tr>
         {% for i in u %}
             <tr>
-		<td><a href="https://item.taobao.com/item.htm?id={{ i[0] }}"target="_blank"> {{ i[1] }}</a></td>
-		{% if i[2] == 2 %}
-                <td style="color:red">{{ i[3] }}</td>
-		{% else %}
-		<td>{{ i[3] }}</td>
-		{% endif %}
-		<td>{{ i[4] }}</td>
-		<td> <form method="post">  <input type="text" size=10 name="position" value={{ i[5] }}>
-				<input type="hidden" name="num_iid" value={{ i[0] }}>
-                <input type="hidden" name="outer_id" value={{ i[1] }}>
-				<input type="submit" name="submit_save" value="保存">
 
-            </form>
-		</td>
-		<td>{{ i[0] }}</td>
-        <td><img src={{ i[6] }} width="64" height="64"></td>
+            <td><a href="https://item.taobao.com/item.htm?id={{ i[0] }}"target="_blank"><img src={{ i[6] }} width="64" height="64"></a></td>
+    		<td><a href="https://item.taobao.com/item.htm?id={{ i[0] }}"target="_blank"> {{ i[1] }}</a></td>
+    		{% if i[2] == 2 %}
+                <td style="color:red">{{ i[3] }}</td>
+    		{% else %}
+    		    <td>{{ i[3] }}</td>
+    		{% endif %}
+    		<td>{{ i[4] }}</td>
+    		<td> 
+                <form method="post">  <input type="text" size=10 name="position" value={{ i[5] }}>
+    				<input type="hidden" name="num_iid" value={{ i[0] }}>
+                    <input type="hidden" name="outer_id" value={{ i[1] }}>
+    				<input type="submit" name="submit_save" value="保存">
+                </form>
+    		</td>
+    		<td>{{ i[0] }}</td>
+            
             </tr>
         {% endfor %}
     </table>
