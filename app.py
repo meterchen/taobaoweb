@@ -52,6 +52,16 @@ def query_by_numiid(database, index):
 
     return item
 
+def query_dup(database):    #查询出售中并且重复上架的宝贝
+    con = sqlite3.connect(database)
+    cur = con.cursor()
+    sql_select = "select * from ITEM where   OUTER_ID in (select OUTER_ID from   (select * from ITEM where STOCK_STATUS='出售') group by   OUTER_ID having COUNT(OUTER_ID) > 1) and STOCK_STATUS='出售'"
+    cur.execute(sql_select)
+    item = cur.fetchall()
+    cur.close()
+
+    return item
+
 def query_nopos(database):
     con = sqlite3.connect(database)
     cur = con.cursor()
@@ -103,8 +113,18 @@ def index():
                         flash("商品不存在！")
                     # return redirect(url_for('index'))
                     render_template('index.html', u=item)
+
             if fun=='2': #显示没有设置货位的商品列表
                 item = query_nopos("./database/seyryan.db")
+                if item:
+                    session['outer_id'] = "SSSS"
+                    session['num_iid'] = item
+                else:
+                    flash("商品不存在！")
+                render_template('index.html', u=item)
+                
+            if fun=='3':
+                item = query_dup("./database/seyryan.db")
                 if item:
                     session['outer_id'] = "SSSS"
                     session['num_iid'] = item
