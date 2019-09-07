@@ -72,6 +72,16 @@ def query_less(database):    #查询出售中并且库存少于10的宝贝
 
     return item
 
+def query_title(database,title):    #查询标题字符
+    con = sqlite3.connect(database)
+    cur = con.cursor()
+    sql_select = "select * from ITEM where NUM<10 and STOCK_STATUS='出售'"
+    cur.execute(sql_select)
+    item = cur.fetchall()
+    cur.close()
+
+    return item
+
 def query_nopos(database):
     con = sqlite3.connect(database)
     cur = con.cursor()
@@ -151,6 +161,17 @@ def index():
                 else:
                     flash("商品不存在！")
                 render_template('index.html', u=item)
+
+            if fun=='5': #查找标题包含某个字符的商品
+                title = request.form.get('outer_id')
+                if outer_id:
+                    item = query_titile("./database/seyryan.db",title)
+                    if item:
+                        session['outer_id'] = "SSSS"
+                        session['num_iid'] = item
+                    else:
+                        flash("商品不存在！")
+                    render_template('index.html', u=item)
 
         if "submit_save" in request.form:
             position = request.form.get('position')

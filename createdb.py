@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
         # cur_fb = con_fb1.cursor()
 
         # 已删除宝贝除外
-        sql_select = '''select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,CLIENT_ID,NUM from ITEM 
+        sql_select = '''select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,CLIENT_ID,NUM,TITLE from ITEM 
                                 where (CLIENT_IS_DELETE  is NULL or CLIENT_IS_DELETE =0)'''
 
         # 显示全部内容
@@ -114,8 +114,8 @@ class MainWindow(QMainWindow):
             #t.append(self.query_picture(database,t[0]))
             num_iid.append(t)
 
-            #t[0]=NUM_IID,t[1]=OUTER_ID,t[2]=CLIENT_NAVIGATION_TYPE,t[3]=CLIENT_ID,t[4]=NUM
-            #t[5]=STOCK_STATUS t[6]=STORE_NAME t[7]=POSITION t[8]= PIC_URL
+            #t[0]=NUM_IID,t[1]=OUTER_ID,t[2]=CLIENT_NAVIGATION_TYPE,t[3]=CLIENT_ID,t[4]=NUM,t[5]=TITLE
+            #t[6]=STOCK_STATUS t[7]=STORE_NAME t[8]=POSITION t[9]= PIC_URL
 
         con.close() #关闭数据库
         # print(num_iid)
@@ -153,14 +153,18 @@ class MainWindow(QMainWindow):
                                         STORE_NAME VARCHAR(96),
                                         POSITION VARCHAR(96),
                                         PIC_URL VARCHAR(256),
-                                        NUM INTEGER(10)
+                                        NUM INTEGER(10),
+                                        TITLE VARCHAR(384)
                                         )'''
         cur_sq3.execute(sql_create)
+
+        # t[0]=NUM_IID,t[1]=OUTER_ID,t[2]=CLIENT_NAVIGATION_TYPE,t[3]=CLIENT_ID,t[4]=NUM,t[5]=TITLE
+        # t[6]=STOCK_STATUS t[7]=STORE_NAME t[8]=POSITION t[9]= PIC_URL
 
         #t[3]=CLIENT_ID
         for t in num_iid:
             #t[3]是CLIENT_ID跳过不存储
-            sql_insert = "insert into ITEM values(%d,'%s',%d,'%s','%s','%s','%s',%d)" % (t[0], t[1], t[2], t[5], t[6],t[7],t[8], t[4])
+            sql_insert = "insert into ITEM values(%d,'%s',%d,'%s','%s','%s','%s',%d,'%s')" % (t[0], t[1], t[2], t[6], t[7],t[8],t[9], t[4],t[5])
             cur_sq3.execute(sql_insert)
 
         # 建立索引
