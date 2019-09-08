@@ -75,7 +75,9 @@ def query_less(database):    #查询出售中并且库存少于10的宝贝
 def query_title(database,title):    #查询标题字符
     con = sqlite3.connect(database)
     cur = con.cursor()
-    sql_select = "select * from ITEM where NUM<10 and STOCK_STATUS='出售'"
+    sql_select = "select * from ITEM where STOCK_STATUS='出售' and TITLE LIKE "
+    sql_select += "'%" + title + "%" + "'"
+
     cur.execute(sql_select)
     item = cur.fetchall()
     cur.close()
@@ -165,7 +167,7 @@ def index():
             if fun=='5': #查找标题包含某个字符的商品
                 title = request.form.get('outer_id')
                 if outer_id:
-                    item = query_titile("./database/seyryan.db",title)
+                    item = query_title("./database/seyryan.db",title)
                     if item:
                         session['outer_id'] = "SSSS"
                         session['num_iid'] = item
