@@ -19,7 +19,7 @@
             <option value="5">标题查询</option>
         </select>
         款号：<input type="text" name="outer_id"/>
-        <input type="submit" name="submit_outer_id" value="Submit"/>
+        <input type="submit" name="submit_outer_id" value="提交"/>
     </form>
 
     <table class="table table-bordered">
@@ -36,7 +36,7 @@
             <tr>
 
             <td><a href="https://item.taobao.com/item.htm?id={{ i[0] }}"target="_blank"><img src={{ i[6] }} width="64" height="64"></a></td>
-    		<td><a href="https://item.taobao.com/item.htm?id={{ i[0] }}"target="_blank"> {{ i[1] }}</a></td>
+    		<td><a href="https://item.taobao.com/item.htm?id={{ i[0] }}"target="_blank"> {{ i[1] +'('+i[5]+')' }}</a></td>
     		{% if i[2] == 2 %}
                 <td style="color:red">{{ i[3] }}</td>
     		{% else %}

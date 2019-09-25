@@ -1,6 +1,7 @@
 #!/usr/bin/python3  
 # -*- coding: utf-8 -*-  
 
+import re
 from flask import Flask, request, redirect, url_for, session, flash
 
 from flask import render_template
@@ -22,9 +23,13 @@ def query_by_outerid(database, index):
     con = sqlite3.connect(database)
     cur = con.cursor()
 
+    tlist = re.findall("\d{4,}",index)
     # sql_select = "select NUM_IID from ITEM where OUTER_ID='ZM6466'"
-    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL from ITEM where OUTER_ID LIKE "
-    sql_select += "'%" + index +"%"+ "'"
+    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL from ITEM where "
+    for t in tlist:
+        sql_select = sql_select+ "OUTER_ID LIKE " + "'%" + t +"%"+ "'" + " OR "
+
+    sql_select = sql_select[:-3]
 
     # 显示全部内容
     cur.execute(sql_select)
@@ -75,8 +80,12 @@ def query_less(database):    #查询出售中并且库存少于10的宝贝
 def query_title(database,title):    #查询标题字符
     con = sqlite3.connect(database)
     cur = con.cursor()
-    sql_select = "select * from ITEM where STOCK_STATUS='出售' and TITLE LIKE "
-    sql_select += "'%" + title + "%" + "'"
+
+    sql_select = "select * from ITEM where STOCK_STATUS='出售'  "
+    # sql_select += "'%" + title + "%" + "'"
+    tlist = title.split()
+    for t in tlist:
+        sql_select += " and " + "TITLE LIKE '%" + t + "%'"
 
     cur.execute(sql_select)
     item = cur.fetchall()
