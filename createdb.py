@@ -177,13 +177,21 @@ class MainWindow(QMainWindow):
 
         self.logt.append("转换完成！")
 
+        # 自动ssh更新
+        server_ip = 'meterchen.gicp.net'
+        server_port = 25393
+        #transport = paramiko.Transport(('192.168.5.26', 22))
+        transport = paramiko.Transport((server_ip, server_port))
 
-        transport = paramiko.Transport(('192.168.5.26', 22))
         transport.connect(username="pi", password='raspberry')
         sftp = paramiko.SFTPClient.from_transport(transport)
         #sftp.mkdir("/home/pi/Documents/sss")
         # 将location.py 上传至服务器 /tmp/test.py
-        sftp.put('C:\\Users\\meterchen\Desktop\\taobaoweb\\seyryan_np.db', '/home/pi/Documents/flaskDemo/database/seyryan_np.db')
+        db_path,_ = os.path.split(os.path.abspath(__file__))
+        db_path = os.path.join(db_path,"seyryan_np.db")
+
+        #sftp.put('C:\\Users\\meterchen\Desktop\\taobaoweb\\seyryan_np.db', '/home/pi/Documents/flaskDemo/database/seyryan_np.db')
+        sftp.put(db_path, '/home/pi/Documents/flaskDemo/database/seyryan_np.db')
         # 将remove_path 下载到本地 local_path
         # sftp.get('/root/oldgirl.txt', 'fromlinux.txt')
 
@@ -191,7 +199,8 @@ class MainWindow(QMainWindow):
         self.logt.append("上传完成！")
 
         # 实例化一个transport对象
-        transport = paramiko.Transport(('192.168.5.26', 22))
+        #transport = paramiko.Transport(('192.168.5.26', 22))
+        transport = paramiko.Transport((server_ip, server_port))
         # 建立连接
         transport.connect(username="pi", password='raspberry')
         # 将sshclient的对象的transport指定为以上的transport
@@ -209,6 +218,8 @@ class MainWindow(QMainWindow):
         # url = prefix + str(num_iid[0][0])
 
         # self.view.load(QUrl(url))
+
+        QMessageBox.information(self, "information",  "完成",   )
 
 
 if __name__ == "__main__":
