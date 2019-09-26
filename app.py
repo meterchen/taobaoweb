@@ -81,11 +81,13 @@ def query_title(database,title):    #查询标题字符
     con = sqlite3.connect(database)
     cur = con.cursor()
 
-    sql_select = "select * from ITEM where STOCK_STATUS='出售'  "
-    # sql_select += "'%" + title + "%" + "'"
+    #sql_select = "select * from ITEM where STOCK_STATUS='出售'  "
+    sql_select = "select * from ITEM where "
     tlist = title.split()
     for t in tlist:
-        sql_select += " and " + "TITLE LIKE '%" + t + "%'"
+        sql_select += "TITLE LIKE '%" + t + "%'" + " AND "
+
+    sql_select = sql_select[:-4]
 
     cur.execute(sql_select)
     item = cur.fetchall()
