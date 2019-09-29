@@ -148,14 +148,16 @@ def index():
                     # return redirect(url_for('index'))
                     render_template('index.html', u=item)
 
-            if fun=='2': #显示没有设置货位的商品列表
-                item = query_nopos("./database/seyryan.db")
-                if item:
-                    session['outer_id'] = "SSSS"
-                    session['num_iid'] = item
-                else:
-                    flash("商品不存在！")
-                render_template('index.html', u=item)
+            if fun=='2': #查找标题包含某个字符的商品
+                title = request.form.get('outer_id')
+                if outer_id:
+                    item = query_title("./database/seyryan.db",title)
+                    if item:
+                        session['outer_id'] = "SSSS"
+                        session['num_iid'] = item
+                    else:
+                        flash("商品不存在！")
+                    render_template('index.html', u=item)
                 
             if fun=='3': #查找重复上架的商品
                 item = query_dup("./database/seyryan.db")
@@ -175,16 +177,14 @@ def index():
                     flash("商品不存在！")
                 render_template('index.html', u=item)
 
-            if fun=='5': #查找标题包含某个字符的商品
-                title = request.form.get('outer_id')
-                if outer_id:
-                    item = query_title("./database/seyryan.db",title)
-                    if item:
-                        session['outer_id'] = "SSSS"
-                        session['num_iid'] = item
-                    else:
-                        flash("商品不存在！")
-                    render_template('index.html', u=item)
+            if fun=='5': #显示没有设置货位的商品列表
+                item = query_nopos("./database/seyryan.db")
+                if item:
+                    session['outer_id'] = "SSSS"
+                    session['num_iid'] = item
+                else:
+                    flash("商品不存在！")
+                render_template('index.html', u=item)
 
         if "submit_save" in request.form:
             position = request.form.get('position')
