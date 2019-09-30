@@ -67,10 +67,20 @@ def query_dup(database):    #查询出售中并且重复上架的宝贝
 
     return item
 
-def query_less(database):    #查询出售中并且库存少于10的宝贝
+def query_less10(database):    #查询出售中并且库存少于10的宝贝
     con = sqlite3.connect(database)
     cur = con.cursor()
     sql_select = "select * from ITEM where NUM<10 and STOCK_STATUS='出售'"
+    cur.execute(sql_select)
+    item = cur.fetchall()
+    cur.close()
+
+    return item
+
+def query_less5(database):    #查询出售中并且库存少于5的宝贝
+    con = sqlite3.connect(database)
+    cur = con.cursor()
+    sql_select = "select * from ITEM where NUM<5 and STOCK_STATUS='出售'"
     cur.execute(sql_select)
     item = cur.fetchall()
     cur.close()
@@ -169,7 +179,16 @@ def index():
                 render_template('index.html', u=item)
 
             if fun=='4': #查找库存少于10的出售中商品
-                item = query_less("./database/seyryan.db")
+                item = query_less10("./database/seyryan.db")
+                if item:
+                    session['outer_id'] = "SSSS"
+                    session['num_iid'] = item
+                else:
+                    flash("商品不存在！")
+                render_template('index.html', u=item)
+
+            if fun=='6': #查找库存少于5的出售中商品
+                item = query_less5("./database/seyryan.db")
                 if item:
                     session['outer_id'] = "SSSS"
                     session['num_iid'] = item
