@@ -177,6 +177,8 @@ class MainWindow(QMainWindow):
 
         self.logt.append("转换完成！")
 
+        QApplication.processEvents()
+
         # 自动ssh更新
         server_ip = 'meterchen.gicp.net'
         server_port = 25393
@@ -198,6 +200,11 @@ class MainWindow(QMainWindow):
         transport.close()
         self.logt.append("上传完成！")
 
+
+        self.logt.append("开始数据库迁移！")
+
+        QApplication.processEvents()
+
         # 实例化一个transport对象
         #transport = paramiko.Transport(('192.168.5.26', 22))
         transport = paramiko.Transport((server_ip, server_port))
@@ -212,6 +219,8 @@ class MainWindow(QMainWindow):
         self.logt.append(stdout.read().decode())
         # 关闭连接
         transport.close()
+
+        QApplication.processEvents()
 
         # prefix = "https://item.taobao.com/item.htm?id="
 
