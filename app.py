@@ -108,8 +108,8 @@ def query_title(database,title):    #查询标题字符
 def query_nopos(database):
     con = sqlite3.connect(database)
     cur = con.cursor()
-    #sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL from ITEM where POSITION LIKE 'AAAA'"
-    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION from ITEM where POSITION LIKE 'AAAA'"
+    #sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL from ITEM where POSITION LIKE 'XXXX'"
+    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION from ITEM where POSITION LIKE 'XXXX'"
     cur.execute(sql_select)
     item = cur.fetchall()
     cur.close()

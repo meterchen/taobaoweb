@@ -99,7 +99,7 @@ class MainWindow(QMainWindow):
 
             # 加上店名
             t.append(store)
-            t.append("AAAA")
+            t.append("XXXX")
             #####
             #颜色图片排除。颜色图片的POS也是0，但是PROPERTIES不是NULL
             #sql_select = "select URL from PICTURE where (CLIENT_ITEMID='%s'  and POS=0 and PROPERTIES is NULL)" % t[3]

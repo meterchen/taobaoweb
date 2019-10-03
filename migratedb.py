@@ -17,7 +17,7 @@ if __name__ == "__main__":
         cur_ob.execute("SELECT POSITION FROM ITEM WHERE NUM_IID=%d"%t)
         pos = cur_ob.fetchall()
         if pos:
-            if pos[0][0] != "AAAA":
+            if pos[0][0] != "XXXX":
                 print("UPDATE ITEM SET POSITION='%s' WHERE NUM_IID=%d"%(pos[0][0],t[0]))
                 cur_sq3.execute("UPDATE ITEM SET POSITION='%s' WHERE NUM_IID=%d"%(pos[0][0],t[0]))
 
