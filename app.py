@@ -116,6 +116,19 @@ def query_nopos(database):
 
     return item
 
+def query_by_pos(database,pos):
+    con = sqlite3.connect(database)
+    cur = con.cursor()
+    #sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL from ITEM where POSITION LIKE 'XXXX'"
+    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION from ITEM where POSITION LIKE "
+    sql_select += "'%" + pos +"%"+ "'"
+
+    cur.execute(sql_select)
+    item = cur.fetchall()
+    cur.close()
+
+    return item
+
 def save_pos(database, position, num_iid):
     con = sqlite3.connect(database)
     cur = con.cursor()
@@ -141,10 +154,12 @@ def index():
     # 几个提交按钮共用一个POST处理方法
     if request.method == 'POST':  # 注意POST为大写
         if "submit_outer_id" in request.form:
+
             fun = request.form.get('flist')
-            outer_id = request.form.get('outer_id')
+            
             # print(username)
             if fun=='1':
+                outer_id = request.form.get('outer_id')
                 if outer_id:
                     item = query_by_outerid("./database/seyryan.db", outer_id)
                     # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.TT", username, store="彤彤店")
@@ -160,7 +175,7 @@ def index():
 
             if fun=='2': #查找标题包含某个字符的商品
                 title = request.form.get('outer_id')
-                if outer_id:
+                if title:
                     item = query_title("./database/seyryan.db",title)
                     if item:
                         session['outer_id'] = "SSSS"
@@ -185,6 +200,15 @@ def index():
                     session['num_iid'] = item
                 else:
                     flash("商品不存在！")
+                render_template('index.html', u=item)  
+
+            if fun=='5': #显示没有设置货位的商品列表
+                item = query_nopos("./database/seyryan.db")
+                if item:
+                    session['outer_id'] = "SSSS"
+                    session['num_iid'] = item
+                else:
+                    flash("商品不存在！")
                 render_template('index.html', u=item)
 
             if fun=='6': #查找库存少于5的出售中商品
@@ -196,14 +220,16 @@ def index():
                     flash("商品不存在！")
                 render_template('index.html', u=item)
 
-            if fun=='5': #显示没有设置货位的商品列表
-                item = query_nopos("./database/seyryan.db")
-                if item:
-                    session['outer_id'] = "SSSS"
-                    session['num_iid'] = item
-                else:
-                    flash("商品不存在！")
-                render_template('index.html', u=item)
+            if fun=='7': #按货位查找商品
+                pos = request.form.get('outer_id')
+                if pos:
+                    item = query_by_pos("./database/seyryan.db",pos)
+                    if item:
+                        session['outer_id'] = "SSSS"
+                        session['num_iid'] = item
+                    else:
+                        flash("商品不存在！")
+                    render_template('index.html', u=item)
 
         if "submit_save" in request.form:
             position = request.form.get('position')
