@@ -134,7 +134,7 @@ def save_pos(database, position, num_iid):
     con = sqlite3.connect(database)
     cur = con.cursor()
 
-    sql_update = "UPDATE ITEM SET POSITION='%s' where NUM_IID = %s" % (position, num_iid)
+    sql_update = "UPDATE ITEM SET POSITION='%s' where NUM_IID = %s" % (position.upper(), num_iid)
     print(sql_update)
     cur.execute(sql_update)
 
