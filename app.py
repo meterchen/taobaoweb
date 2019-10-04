@@ -109,7 +109,8 @@ def query_nopos(database):
     con = sqlite3.connect(database)
     cur = con.cursor()
     #sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL from ITEM where POSITION LIKE 'XXXX'"
-    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION from ITEM where POSITION LIKE 'XXXX'"
+    #sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION from ITEM where POSITION LIKE 'XXXX'"
+    sql_select = "select * from ITEM where POSITION LIKE 'XXXX'"
     cur.execute(sql_select)
     item = cur.fetchall()
     cur.close()
@@ -120,7 +121,7 @@ def query_by_pos(database,pos):
     con = sqlite3.connect(database)
     cur = con.cursor()
     #sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL from ITEM where POSITION LIKE 'XXXX'"
-    sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION from ITEM where POSITION LIKE "
+    sql_select = "select * from ITEM where POSITION LIKE "
     sql_select += "'%" + pos +"%"+ "'"
 
     cur.execute(sql_select)
