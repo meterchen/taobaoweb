@@ -87,7 +87,7 @@ def query_less5(database):    #查询出售中并且库存少于5的宝贝
 
     return item
 
-def query_title(database,title):    #查询标题字符
+def query_title(database,title,stock):    #查询标题字符
     con = sqlite3.connect(database)
     cur = con.cursor()
 
@@ -98,6 +98,11 @@ def query_title(database,title):    #查询标题字符
         sql_select += "TITLE LIKE '%" + t + "%'" + " AND "
 
     sql_select = sql_select[:-4]
+
+    if stock == 1:
+        sql_select += " AND STOCK_STATUS='出售'"
+    elif stock == 2:
+        sql_select += " AND STOCK_STATUS='仓库'"
 
     cur.execute(sql_select)
     item = cur.fetchall()
@@ -176,8 +181,15 @@ def index():
 
             if fun=='2': #查找标题包含某个字符的商品
                 title = request.form.get('outer_id')
+
+                stock_list = request.values.getlist('stock')
+                if len(stock_list) == 0:
+                    stock = 0       #both unselected
+                elif stock_list[0]=="instock":
+                    stock = 1   #出售中
+
                 if title:
-                    item = query_title("./database/seyryan.db",title)
+                    item = query_title("./database/seyryan.db",title, stock)
                     if item:
                         session['outer_id'] = "SSSS"
                         session['num_iid'] = item
