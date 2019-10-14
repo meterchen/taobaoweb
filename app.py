@@ -24,6 +24,9 @@ def query_by_outerid(database, index):
     cur = con.cursor()
 
     tlist = re.findall("\d{4,}",index)
+
+    #此处需要加入对tlist是否为None的判断
+
     # sql_select = "select NUM_IID from ITEM where OUTER_ID='ZM6466'"
     sql_select = "select NUM_IID,OUTER_ID,CLIENT_NAVIGATION_TYPE,STOCK_STATUS, STORE_NAME, POSITION,PIC_URL from ITEM where "
     for t in tlist:
@@ -167,7 +170,17 @@ def index():
             if fun=='1':
                 outer_id = request.form.get('outer_id')
                 if outer_id:
-                    item = query_by_outerid("./database/seyryan.db", outer_id)
+                    tlist = re.findall("\d{4,}", outer_id)
+                    if tlist:   #根据outer_id查询
+                        item = query_by_outerid("./database/seyryan.db", outer_id)
+                    else:       #根据标题查询
+                        stock_list = request.values.getlist('stock')
+                        if len(stock_list) == 0:
+                            stock = 0  # both unselected
+                        elif stock_list[0] == "instock":
+                            stock = 1  # 出售中
+                        item = query_title("./database/seyryan.db", outer_id, stock)
+
                     # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.TT", username, store="彤彤店")
                     # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.NT", username, store="女童店")
                     # num_iid += query_db("/home/pi/Documents/flaskDemo/database/APPITEM.DAT.HD", username, store="憨豆店")
