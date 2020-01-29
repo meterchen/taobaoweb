@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
         main_frame.setLayout(self.layout_v)
         self.setCentralWidget(main_frame)
 
-        self.setWindowState(Qt.WindowMaximized)
+        #self.setWindowState(Qt.WindowMaximized)
 
     def query_picture(self,database,num_iid):
         con = fdb.connect(host='127.0.0.1', database=database, user='sysdba', password='masterkey', charset="utf8")
@@ -140,7 +140,12 @@ class MainWindow(QMainWindow):
         num_iid += self.query_fdb(base_dir + "/users/meterchen/" + "APPITEM.DAT", store="女童店")
         num_iid += self.query_fdb(base_dir + "/users/爱跳的憨豆/" + "APPITEM.DAT", store="憨豆店")
 
-        con_sq3 = sqlite3.connect("seyryan_np.db")
+        print(sys.argv)
+        db_path,_ = os.path.split(os.path.abspath(__file__))
+        db_path = os.path.join(db_path,"seyryan_np.db")
+
+        #con_sq3 = sqlite3.connect("seyryan_np.db")
+        con_sq3 = sqlite3.connect(db_path)
         cur_sq3 = con_sq3.cursor()
 
         sql_drop = "DROP TABLE if exists ITEM "  # 若表存在则删除
@@ -182,6 +187,9 @@ class MainWindow(QMainWindow):
         # 自动ssh更新
         server_ip = 'meterchen.gicp.net'
         server_port = 25393
+        #server_ip = "192.168.5.26"
+        #server_port = 22
+
         #transport = paramiko.Transport(('192.168.5.26', 22))
         transport = paramiko.Transport((server_ip, server_port))
 
@@ -217,6 +225,10 @@ class MainWindow(QMainWindow):
         stdin, stdout, stderr = ssh.exec_command('cd /home/pi/Documents/flaskDemo/database;./migratedb.sh')
 
         self.logt.append(stdout.read().decode())
+
+        #bugfix 重启ngix才会重新读取数据库？？？？
+        #ssh.exec_command('sudo reboot')
+
         # 关闭连接
         transport.close()
 
